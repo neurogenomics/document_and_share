@@ -1,0 +1,57 @@
+---
+title: "rmarkdown_template" 
+author: "AUTHOR NAME"
+date: "Most recent update:<br> `r Sys.Date()`"
+output: 
+  rmarkdown::html_document: 
+    theme: spacelab
+    highlight: zenburn 
+    code_folding: show 
+    toc: true 
+    toc_float: true
+    smooth_scroll: true
+    number_sections: false 
+    self_contained: true 
+editor_options: 
+  chunk_output_type: inline
+---
+ 
+```{r setup, include=T, message=F} 
+root.dir <- here::here()
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  root.dir = root.dir
+  # fig.height = 12,
+  # fig.width = 10
+)  
+knitr::opts_knit$set(root.dir = root.dir, dpi = 300)   
+```
+ 
+# Section 1 
+
+## Section 1.1
+
+```{r}
+print("Code goes here")
+```
+
+# Section 2 
+
+## Section 2.1
+
+```{r}
+message("More code goes here")
+```
+
+# Session info  
+
+<details>
+
+```{r Session Info, attr.output='style="max-height: 200px;"'}
+utils::sessionInfo()
+```
+
+</details>
+
+

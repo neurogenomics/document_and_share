@@ -1,0 +1,335 @@
+---
+title: "rmarkdown_example" 
+author: "Brian M. Schilder"
+date: "Most recent update:<br> `r Sys.Date()`"
+output: 
+  rmarkdown::html_document: 
+    theme: spacelab
+    highlight: zenburn 
+    code_folding: show 
+    toc: true 
+    toc_float: true
+    smooth_scroll: true
+    number_sections: false 
+    self_contained: true 
+editor_options: 
+  chunk_output_type: inline
+---
+
+**yaml header **: 
+- The arguments within `--- ... ---` are called the yaml header. It includes various options to customize your knitted rmarkdown output file. This part is not visible in the knitted output, only in the rmarkdown file.   
+
+- One especially useful feature is `toc: true` which generates a floating table of contents (toc), which helps navigate large knitted rmarkdowns.  
+
+- Also note that if you want to share a link to a specific (sub)section in the rmarkdown, simply go to that section, then hover over the header until you see a link symbol. You can then copy that link and share it with others, such that it will immediately take them to that part of the rmarkdown output (assuming you've already pushed it to GitHub Pages).  
+
+
+**setup chunk**:  
+
+- Below, you can modify the default settings when you run chunks interactively ( `knitr::opts_chunk$set(...)` ) or
+when you are knitting the rmarkdown ( `knitr::opts_knit$set(...)` ).
+Because these are set in the first chunk, the modifications will be applied to all subsequent chunks.  
+
+- If there's code you want to make sure is always run first (before you run code in any other chunks)
+you can add it here, in the special `{r setup}` chunk.  
+
+- This is especially helpful when you don't want to manually load the same packages every time you open the rmarkdown.
+
+```{r setup, include=T, message=F} 
+root.dir <- here::here()
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  root.dir = root.dir
+  # fig.height = 12,
+  # fig.width = 10
+)  
+knitr::opts_knit$set(root.dir = root.dir, dpi = 300)  
+
+
+library(dplyr)  
+library(ggplot2)
+library(plotly)
+library(uwot)
+```
+
+**Headers**:  
+
+- Headers are extremely useful for hierarchically organizing your code.  
+
+- You can make subsections within the higher-level section using progressively more # symbols.  
+
+- For example:   
+
+  * `# Analysis 1`  
+  * `## Analysis with subsample A`  
+  * `### Results table`  
+  * `### Plot`  
+  * `## Analysis with subsample B`  
+  * `### Results table`  
+  * `### Plot`  
+  * `# Analysis 2`  
+  * `## Analysis with subsample A`  
+  * `### Results table`  
+  * `### Plot`  
+  *  etc.  
+- Once you've added your headers, you can quickly navigate across sections by clicking "*Show document outline*" button in the upper right of RStudio. 
+
+**Chunk names**:  
+- You can also choose to name chunks within the chunk options, e.g. `{r Section 1}`. This helps to keep track of which step of your code is running when you go to knit it. 
+
+# Color dictionary
+
+Let's first create a named list of colors so that the datasets we'll be using have consistent coloring. 
+
+```{r}
+color_dict <- c(TabulaMuris="turquoise", Zeisel2018="slateblue")
+```
+
+
+
+# Tabula Muris
+
+- Let's analyze some single-cell RNA-seq data from [Tabula Muris](https://tabula-muris.ds.czbiohub.org/). 
+ 
+ 
+## Import data 
+
+-  First, let's import the data. This object contains mean gene expression for each cell-type in the Tabula Muris atlas. 
+- Here, we'll use Level 2 to extract a matrix of cell-type means from higher-order cell-types.  
+
+```{r Import data }
+tabulamuris <- readRDS(url("https://neurogenomics.github.io/model_celltype_conservation/processed_data/EWCE/standardized_CTD/TabulaMuris.rds"))
+mat1 <- tabulamuris$level_2$mean_exp
+```
+
+## UMAP  
+
+- Next we'll run UMAP to reduce the dimensions. 
+- We then prepare the low-dimensional cell embeddings as a data.frame.
+
+### Run 
+
+```{r Run UMAP}
+umap_res1 <- uwot::umap(X = t(mat1), 
+                       # Return 3 dimensions for 3D plotting
+                       n_components = 3,
+                       # Get extra UMAP info (not just the embedding)
+                       ret_extra = c("model","nn","fgraph"))
+## Prepare embeddings dataframe
+embedding1 <- data.frame(umap_res1$embedding) %>% 
+  `colnames<-`(paste("UMAP",c(1:ncol(umap_res1$embedding)), sep = "_")) %>% 
+  dplyr::mutate(cell_id=colnames(mat1)) %>%
+  tidyr::separate(col = "cell_id", sep = "[.]", into = c("species","dataset","celltype"), remove = F, extra = "merge") 
+```
+
+### Plot 
+
+```{r Plot UMAP}
+gg_umap1 <- ggplot(embedding1, aes(x=UMAP_1, y=UMAP_2, label=celltype, color=dataset)) +
+  geom_point() +
+  scale_color_manual(values = color_dict)
+print(gg_umap1)
+```
+
+### Plot interactive  
+
+Now let's explore the data interactively using plotly.
+
+
+**Plotly commands**: 
+- Hover to see data info "tooltips". 
+- Click and drag to zoom in within a window.  
+- Double click to return to the full view.  
+- SHIFT + click and drag to pan (or simply click and drag the axes).  
+
+**Show/hide groups**: 
+- Another feature of plotly to note is that in the legend, you can click any of the groups to make them invisible/visible.  
+
+- This can be especially helpful when you want to focus on a specific subset of the data, or remove other groups that are obscuring some other part of the data. 
+
+```{r Plot UMAP-interactive}
+plotly::ggplotly(gg_umap1)
+```
+
+# Zeisel2018
+
+Now let's import another mouse scRNAseq dataset, this time from [Zeisel 2018](http://mousebrain.org/adolescent/). 
+
+Note, you can't have two chunks with the same name, we so add the suffix "-Zeisel2018" here. 
+
+```{r Import data-Zeisel2018}
+zeisel2018 <- readRDS(url("https://neurogenomics.github.io/model_celltype_conservation/processed_data/EWCE/standardized_CTD/Zeisel2018.rds"))
+level <- 5
+mat2 <- zeisel2018[[level]]$mean_exp
+```
+
+
+## UMAP 
+
+### Run  
+
+```{r}
+umap_res2 <- uwot::umap(X = t(mat2), 
+                       # Return 3 dimensions for 3D plotting
+                       n_components = 3,
+                       # Get extra UMAP info (not just the embedding)
+                       ret_extra = c("model","nn","fgraph"))
+## Prepare embeddings dataframe
+embedding2 <- data.frame(umap_res2$embedding) %>% 
+  `colnames<-`(paste("UMAP",c(1:ncol(umap_res2$embedding)), sep = "_")) %>% 
+  dplyr::mutate(cell_id=colnames(zeisel2018[[level]]$mean_exp)) %>%
+  tidyr::separate(col = "cell_id", sep = "[.]", into = c("species","dataset","celltype"), remove = F, extra = "merge")
+```
+
+### Plot 
+
+```{r  }
+gg_umap2 <- ggplot(embedding2, aes(x=UMAP_1, y=UMAP_2, label=celltype, color=dataset)) +
+  geom_point()  +
+  scale_color_manual(values = color_dict)
+print(gg_umap2)
+```
+
+### Plot interactive   
+
+```{r  }
+plotly::ggplotly(gg_umap2)
+```
+
+# Merged datasets  
+
+
+## Patchwork 
+
+Let's first make a composite plot of both sets of UMAP embeddings. [Patchwork](https://patchwork.data-imaginist.com 
+) is a flexible and easy-to-use package to combine plots. 
+
+**Note**: If you try to give patchwork objects to `ggplotly()`, it will only use the last plot.
+
+```{r Patchwork}
+library(patchwork)
+gg_multi <- gg_umap1 + gg_umap2 + 
+  ## Modify plot layout
+  patchwork::plot_layout(ncol = 1, heights = c(1,1)) +
+  ## Annotate plot/subplots 
+  patchwork::plot_annotation(title = "UMAP projections", tag_levels = letters)
+print(gg_multi)
+```
+
+## Save plot
+
+**Image formats**: 
+
+- Which format you save in can have a big impact on the quality of the image. This is especially important when preparing figures for publications. "pdf" and "svg" formats don't degrade their resolution when you zoom in/out, making them better for publications. 
+
+- `ggsave()` will automatically detect the image type you want to save from the extension in the `filename=`. In the example below, we're saving the figure as a pdf. 
+
+- You can also adjust `dpi` to increase resolution when saving the figures, even when saving in other formats (e.g. "png" or "jpg"). Most journals require dpi ≥ 300 for figures, though you'll want to check the journal-specific author guidelines to be sure.  
+
+- **Note**: You'll probably want to not use the `dpi` argument when using the file format "svg", because this can cause problems when saving in R. 
+
+```{r Save plot}
+ggplot2::ggsave(filename = here::here("plots/gg_multi_umap.pdf"),
+                height = 8,
+                width = 10,
+                dpi = 300)
+```
+
+
+
+## Merge 
+
+Now let's merge both datasets and rerun UMAP.
+
+Merge on gene names (row names). 
+ 
+```{r}
+mat <- merge(mat1, mat2, by=0) %>% 
+  tibble::column_to_rownames("Row.names") %>%
+  as.matrix()
+```
+
+## UMAP  
+
+### Run
+
+```{r}
+umap_res <- uwot::umap(X = t(mat), 
+                       # Return 3 dimensions for 3D plotting
+                       n_components = 3,
+                       # Get extra UMAP info (not just the embedding)
+                       ret_extra = c("model","nn","fgraph"))
+## Prepare embeddings dataframe
+embedding <- data.frame(umap_res$embedding) %>% 
+  `colnames<-`(paste("UMAP",c(1:ncol(umap_res$embedding)), sep = "_")) %>% 
+  dplyr::mutate(cell_id=colnames(mat)) %>%
+  tidyr::separate(col = "cell_id", sep = "[.]", into = c("species","dataset","celltype"), remove = F, extra = "merge")
+```
+
+## Plot interactive   
+
+```{r}
+gg_umap <- ggplot(embedding, aes(x=UMAP_1, y=UMAP_2, label=celltype, color=dataset, shape=species)) +
+  geom_point() +
+  scale_color_manual(values = color_dict)
+plotly::ggplotly(gg_umap)
+```
+
+
+## Plot interactive: 3D!  
+
+- Here we plot the same UMAP embedding in 3D! In addition to the usual plotly commends, you can use the scroll wheel on your mouse to zoom in and out. 
+
+- This allows us to explore another dimension of the data that could reveal aspects not visible previously. For example, sometimes clusters appear to be overlapping when just looking at dimensions 1 (x) and 2 (y), but in reality the clusters are far away from each other in the 3rd dimension (z). 
+
+- This also lets us to flexibly zoom in and out of the data without have to regenerate the plot each time. 
+
+- From this, plot, we can see the samples largely segregate according to which dataset they came from. This indicates we should probably do some data integration steps (using tools like LIGER, fastMNN, or CellBLAST) before analyzing the data further.  
+
+```{r Plot 3D, fig.height=7, fig.width=7} 
+gg_umap_3d <- plotly::plot_ly(data = embedding, 
+                              x= ~UMAP_1, y= ~UMAP_2, z= ~UMAP_3, 
+                              color= ~dataset, symbol= ~species, 
+                              alpha = .8, colors = color_dict)
+gg_umap_3d
+```
+
+
+# Python  
+
+- Briefly, I'll also mention that you can use other coding languages in the same rmarkdown, including python! This functionality uses the R package [reticulate](https://rstudio.github.io/reticulate/) by default. 
+
+- See a tutorial [here](https://rstudio.github.io/reticulate/articles/r_markdown.html).
+
+- You can even import objects created in R using the `r.<object_name>` syntax.
+
+
+```{python}
+import platform
+print(platform.python_version())
+
+import pandas as pd
+embed = r.embedding
+cell_count  = embed.groupby(["dataset"]).celltype.count()
+print(cell_count)
+```
+
+
+# Session info  
+
+- It's always a good idea to print your Session Info at the end of your Rmarkdown so that others can see which versions of R and R packages you used, making your work easier to reproduce later.  
+
+- The Session Info output can be quite long, so we wrap it within the html syntax `<details>...</details>` to collapse it.  
+
+- Another trick is to add `attr.output='style="max-height: 200px;"'` within the `{r...}` chunk options. This means that if your output is over 200 pixels in height, it will put all the contents into a scrollable box.  
+
+<details>
+
+```{r Session Info, attr.output='style="max-height: 200px;"'}
+utils::sessionInfo()
+```
+
+</details>
+
+
