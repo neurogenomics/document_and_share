@@ -22,3 +22,34 @@ Strategies for documentation and sharing of data analyses.
 - ### [Example](https://neurogenomics.github.io/AD_CVD_genetics/code/DeGAs.html)   
 
     + [Animation example](https://neurogenomics.github.io/AD_CVD_genetics/code/DeGAs.html#2D-UMAP)
+
+## Conda 
+
+- I've created yaml file that can be used to construct a conda env (named "`pyre`") with R, Python, and Jupyter, and all the necessary supporting packages. 
+
+1. ### Create conda env  
+
+```
+conda env create -f https://github.com/neurogenomics/document_and_share/raw/main/templates/env.yml
+```  
+
+2. ### Add env to Jupyter 
+
+``` 
+python -m ipykernel install --user --name=pyre
+```
+
+3. ### Activate conda env  
+
+```
+conda activate pyre
+```  
+
+4. ### Start Jupyter  
+
+``` 
+jupyter notebook
+```
+
+
+
