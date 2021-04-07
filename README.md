@@ -25,7 +25,7 @@ Strategies for documentation and sharing of data analyses.
 
 ## Conda 
 
-- I've created yaml file that can be used to construct a conda env (named "`pyre`") with R, Python, and Jupyter, and all the necessary supporting packages. 
+- [Here you can find a yaml file](https://github.com/neurogenomics/document_and_share/blob/main/templates/env.yml) that can be used to construct a conda env (named "`pyre`") that includes R, Python, and Jupyter, and all the necessary supporting packages. 
 
 1. ### Create conda env  
 
