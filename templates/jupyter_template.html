@@ -13109,11 +13109,58 @@ $( document ).ready(function(){
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Disable jedi because it interferes with tab completion </span>
+<span class="o">%</span><span class="k">config</span> IPCompleter.use_jedi = False
+<span class="c1"># Automatically re-import external python scripts when they&#39;ve been changed</span>
+<span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+<span class="c1"># Shown matplotlib/seaborn plots within the Jupyter notebook</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline 
+
+<span class="c1"># Import libraries</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span> 
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span> <span class="k">as</span> <span class="n">md</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>  
+
+<span class="c1"># Increase figure resolution</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">300</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+<span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s1">&#39;jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">:</span><span class="mi">300</span><span class="p">,</span> <span class="s1">&#39;savefig.dpi&#39;</span><span class="p">:</span><span class="mi">300</span><span class="p">})</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;notebook&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span> 
+
+<span class="c1"># Report last time the notebook was updated</span>
+<span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%B </span><span class="si">%d</span><span class="s1">, %Y&#39;</span><span class="p">)</span> 
+<span class="n">display</span><span class="p">(</span><span class="n">md</span><span class="p">(</span><span class="s2">&quot;**Last update**: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">)))</span>
+<span class="c1"># Set working directory</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;/Users/schilder/Desktop/document_and_share&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">pwd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 <div class="output_wrapper">
 <div class="output">
 
+
 <div class="output_area">
+
+    <div class="prompt"></div>
+
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -13124,6 +13171,9 @@ $( document ).ready(function(){
 </div>
 
 <div class="output_area">
+
+    <div class="prompt output_prompt">Out[1]:</div>
+
 
 
 
@@ -13152,11 +13202,25 @@ $( document ).ready(function(){
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Code goes here.&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 <div class="output_wrapper">
 <div class="output">
 
+
 <div class="output_area">
+
+    <div class="prompt"></div>
+
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Code goes here.
@@ -13183,11 +13247,25 @@ $( document ).ready(function(){
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;More code goes here.&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 <div class="output_wrapper">
 <div class="output">
 
+
 <div class="output_area">
+
+    <div class="prompt"></div>
+
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>More code goes here.
@@ -13212,22 +13290,22 @@ $( document ).ready(function(){
 <p>The following will convert this notebook into an html file.</p>
 <h3 id="1.-In-command-line,-activate-your-conda-env-(e.g.-pyre).">1. In command line, activate your conda env (e.g. <code>pyre</code>).<a class="anchor-link" href="#1.-In-command-line,-activate-your-conda-env-(e.g.-pyre).">&#182;</a></h3><p><code>conda activate pyre</code></p>
 <p><strong>Note</strong>: Depending on which version of conda you're using, you may need to enter <code>source activate &lt;env_name&gt;</code> instead.</p>
-<h3 id="2.-Render-the-notebook:">2. Render the notebook:<a class="anchor-link" href="#2.-Render-the-notebook:">&#182;</a></h3><p><code>jupyter nbconvert --to html_toc --execute templates/jupyter_template.ipynb --no-input</code></p>
+<h3 id="2.-Render-the-notebook:">2. Render the notebook:<a class="anchor-link" href="#2.-Render-the-notebook:">&#182;</a></h3><p><code>jupyter nbconvert --to html_toc --execute templates/jupyter_template.ipynb</code></p>
 <h3 id="3.-Push-to-GitHub">3. Push to GitHub<a class="anchor-link" href="#3.-Push-to-GitHub">&#182;</a></h3><p>Push the new html file to GitHub.</p>
-<p><code>git add .</code>
-<code>git commit -m "Some notes on updates"</code>
-<code>git push</code></p>
+<p><code>git add .</code></p>
+<p><code>git commit -m "Some notes on updates"</code></p>
+<p><code>git push</code></p>
 <h3 id="4.-Share-the-link">4. Share the link<a class="anchor-link" href="#4.-Share-the-link">&#182;</a></h3><p>Once GitHub Pages has updated (this can take a while if it's the first time you've added a given html file), you can infer the link by adding the path to the file (within the GitHub repo) to the url prefix (e.g. <a href="https://neurogenomics.github.io/document_and_share/">https://neurogenomics.github.io/document_and_share/</a>):</p>
 <p><code>https://neurogenomics.github.io/document_and_share/templates/jupyter_template.html</code></p>
-<p>You can also embed the link directly into this Jupyter notebook:</p>
+<p>You can also embed the link directly into this Jupyter notebook using the <code>[label](url)</code> syntax:</p>
 <p><a href="https://neurogenomics.github.io/document_and_share/templates/jupyter_template.html">&gt;&gt; Results online here &lt;&lt;</a></p>
 <hr>
 
-<h3 id="Options">Options<a class="anchor-link" href="#Options">&#182;</a></h3><p>Here are the optional flags being used:</p>
+<h3 id="Options">Options<a class="anchor-link" href="#Options">&#182;</a></h3><p>Here are some of the optional flags:</p>
 <ul>
 <li><code>--to html_toc</code>: Exports notebook at an html file with a table of contents (toc).</li>
 <li><code>--execute</code>: This is only necessary when the notebook contains interactive plotly plots. </li>
-<li><code>--no-input</code>: This will hide all the code in the output file.</li>
+<li><code>--no-input</code>: This will hide all the code in the output file. Useful when you want to share your results but keep your code private.</li>
 </ul>
 <p>For a full list of export options, enter:</p>
 <p><code>jupyter nbconvert -h</code></p>
@@ -13243,11 +13321,30 @@ $( document ).ready(function(){
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">md</span><span class="p">(</span><span class="s2">&quot;## System info&quot;</span><span class="p">))</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">sys_info</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sys_info</span><span class="p">())</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">md</span><span class="p">(</span><span class="s2">&quot;## Conda env&quot;</span><span class="p">))</span>
+<span class="o">!</span>conda list
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 <div class="output_wrapper">
 <div class="output">
 
+
 <div class="output_area">
+
+    <div class="prompt"></div>
+
 
 
 <div class="output_markdown rendered_html output_subarea ">
@@ -13257,6 +13354,9 @@ $( document ).ready(function(){
 </div>
 
 <div class="output_area">
+
+    <div class="prompt"></div>
+
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>{&#39;commit_hash&#39;: &#39;223e783c4&#39;,
@@ -13275,6 +13375,9 @@ $( document ).ready(function(){
 
 <div class="output_area">
 
+    <div class="prompt"></div>
+
+
 
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="Conda-env">Conda env<a class="anchor-link" href="#Conda-env">&#182;</a></h2>
@@ -13283,6 +13386,9 @@ $( document ).ready(function(){
 </div>
 
 <div class="output_area">
+
+    <div class="prompt"></div>
+
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre># packages in environment at /opt/anaconda3/envs/pyre:
@@ -13381,7 +13487,7 @@ libsodium                 1.0.18               hbcb3906_1    conda-forge
 libssh2                   1.9.0                h52ee1ee_6    conda-forge
 libtiff                   4.2.0                h355d032_0    conda-forge
 libunistring              0.9.10               h1de35cc_0    conda-forge
-libwebp-base              1.2.0                h0d85af4_2    conda-forge
+
 libxml2                   2.9.10               h802ca4f_3    conda-forge
 libxslt                   1.1.33               h5739fc3_2    conda-forge
 lineedit                  0.1.6              pyhd8ed1ab_0    conda-forge
@@ -13599,7 +13705,7 @@ seaborn                   0.11.1               hd8ed1ab_1    conda-forge
 seaborn-base              0.11.1             pyhd8ed1ab_1    conda-forge
 send2trash                1.5.0                      py_0    conda-forge
 setuptools                49.6.0           py38h50d1736_3    conda-forge
-six                       1.15.0             pyh9f0ad1d_0    conda-forge
+
 sqlite                    3.35.4               h44b9ce1_0    conda-forge
 statsmodels               0.12.2           py38ha1b04c9_0    conda-forge
 tapi                      1100.0.11            h9ce4665_0    conda-forge
@@ -13633,6 +13739,16 @@ zstd                      1.4.9                h582d3a0_0    conda-forge
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 </div>
     </div>
