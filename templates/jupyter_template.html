@@ -13305,7 +13305,8 @@ $( document ).ready(function(){
 <ul>
 <li><code>--to html_toc</code>: Exports notebook at an html file with a table of contents (toc).</li>
 <li><code>--execute</code>: This is only necessary when the notebook contains interactive plotly plots. </li>
-<li><code>--no-input</code>: This will hide all the code in the output file. Useful when you want to share your results but keep your code private.</li>
+<li><code>--no-input</code>: This will hide all the code in the output file. Useful when you want to share your results but keep your code private. </li>
+<li><code>--ExecutePreprocessor.timeout=180</code>: Add this flag to avoid a timeout error when your notebook takes a long time to render. </li>
 </ul>
 <p>For a full list of export options, enter:</p>
 <p><code>jupyter nbconvert -h</code></p>
@@ -13487,7 +13488,7 @@ libsodium                 1.0.18               hbcb3906_1    conda-forge
 libssh2                   1.9.0                h52ee1ee_6    conda-forge
 libtiff                   4.2.0                h355d032_0    conda-forge
 libunistring              0.9.10               h1de35cc_0    conda-forge
-
+libwebp-base              1.2.0                h0d85af4_2    conda-forge
 libxml2                   2.9.10               h802ca4f_3    conda-forge
 libxslt                   1.1.33               h5739fc3_2    conda-forge
 lineedit                  0.1.6              pyhd8ed1ab_0    conda-forge
@@ -13705,7 +13706,7 @@ seaborn                   0.11.1               hd8ed1ab_1    conda-forge
 seaborn-base              0.11.1             pyhd8ed1ab_1    conda-forge
 send2trash                1.5.0                      py_0    conda-forge
 setuptools                49.6.0           py38h50d1736_3    conda-forge
-
+six                       1.15.0             pyh9f0ad1d_0    conda-forge
 sqlite                    3.35.4               h44b9ce1_0    conda-forge
 statsmodels               0.12.2           py38ha1b04c9_0    conda-forge
 tapi                      1100.0.11            h9ce4665_0    conda-forge
