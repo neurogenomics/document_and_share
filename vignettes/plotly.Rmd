@@ -1,0 +1,67 @@
+---
+title: "Interactive plotting with plotly"
+author: "<h4>Brian Schilder</h4>"
+date: "<h4>`r Sys.Date()`</h4>" 
+output: 
+  html_document:
+    toc: true # table of content true  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(plotly)
+library(dplyr)
+```
+
+
+
+The R package [plotly](https://plotly.com/r/) makes it easy to turn your ggplots into interactive plots. 
+This can be super useful for data exploration, especially when plots are crammed with lots of data.
+
+
+```{r}
+data("mtcars")
+
+gp <- ggplot(mtcars, aes(x=disp, y=mpg, color=gear)) +
+  geom_point() +
+  theme_bw()
+print(gp) 
+```
+
+Now let's make it interactive!
+
+```{r}
+ggp <- plotly::ggplotly(gp)
+ggp
+```
+
+
+`ggplotly` works on most ggplot objects (though to varying degrees of success with some more complex plot types). 
+
+```{r}
+bp <- ggplot(mtcars, aes(x=gear, y=mpg, fill=gear)) +
+  geom_bar(stat="identity") +
+  theme_bw()
+
+print(bp) 
+
+gbp <- plotly::ggplotly(bp)
+gbp
+```
+
+
+
+# Session Info
+
+<details>
+
+```{r Session Info}
+utils::sessionInfo()
+```
+
+</details>
+
