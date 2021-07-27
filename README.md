@@ -15,6 +15,8 @@ Strategies for documentation and sharing of data analyses.
 
 - ### [Example](https://neurogenomics.github.io/document_and_share/templates/rmarkdown_example.html) 
 
+- ### [Plotly vignette](https://neurogenomics.github.io/document_and_share/vignettes/plotly.html) 
+
 ## Jupyter 
 
 - ### [Template](https://neurogenomics.github.io/document_and_share/templates/jupyter_template.html)  
